@@ -4,7 +4,7 @@ import { makeOrder } from 'niftyconnect-js'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useAccount } from 'wagmi'
 import { contracts, FEE_ADDRESS } from '../../../../constants'
-import { useApproveForAll, useChainId, useIsApprovedForAll } from '../../../../hooks'
+import { useApproveForAll, useIsApprovedForAll } from '../../../../hooks'
 import { Side, TokenStandard } from '../../../../types'
 import { useListModal } from '../../context'
 import ApprovedSvg from './approved.svg'
@@ -13,7 +13,6 @@ export const ListProgress = () => {
   const [isApproved, setIsApproved] = useState(false)
   const toast = useToast({ position: 'top' })
   const { address } = useAccount()
-  const chainId = useChainId()
   const {
     state: {
       salePrice,
@@ -42,7 +41,7 @@ export const ListProgress = () => {
       saleKind: saleType,
       tokenStandard: token_standard === 'erc1155' ? TokenStandard.erc1155 : TokenStandard.erc721,
       listTime: moment(),
-      chainId: chainId,
+      chainId: 1,
       makerAddress: address,
     })
       .then((tx) => {
@@ -72,7 +71,6 @@ export const ListProgress = () => {
   }, [
     address,
     amount,
-    chainId,
     expireTime,
     nft_address,
     payment.contractAddress,
@@ -85,11 +83,12 @@ export const ListProgress = () => {
   ])
 
   useEffect(() => {
-    isApprovedForAll({ operator: contracts.NiftyConnectExchange[chainId], owner: address }).then((approved) => {
+    if (!address) return
+    isApprovedForAll({ operator: contracts.NiftyConnectExchange[1], owner: address }).then((approved) => {
       setIsApproved(approved)
 
       if (!approved) {
-        approveForAll({ contractAddress: contracts.NiftyConnectExchange[chainId], approved: true })
+        approveForAll({ contractAddress: contracts.NiftyConnectExchange[1], approved: true })
           .then((res) => {
             setIsApproved(res)
             makeNiftyOrder()
@@ -103,20 +102,8 @@ export const ListProgress = () => {
         makeNiftyOrder()
       }
     })
-  }, [
-    address,
-    approveForAll,
-    chainId,
-    expireTime,
-    isApprovedForAll,
-    makeNiftyOrder,
-    nft_address,
-    payment,
-    salePrice,
-    setStep,
-    token_id,
-    token_standard,
-  ])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <Container padding="0" marginTop="30px">
