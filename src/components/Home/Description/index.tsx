@@ -14,7 +14,7 @@ const DescContainer = chakra(Flex, {
 })
 
 export const Description = () => {
-  const { data } = useAccount()
+  const { address } = useAccount()
   return (
     <DescContainer>
       <Container
@@ -42,7 +42,7 @@ export const Description = () => {
             Trading fee based on governance, starting from 0%
           </Text>
           <Flex fontSize="18px" color="#3B4556" marginTop="32px">
-            <Link href={`/account/${data?.address}`}>
+            <Link href={`/account/${address}`}>
               <a> {`List now  ->`}</a>
             </Link>
           </Flex>
