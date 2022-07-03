@@ -1,0 +1,19 @@
+{
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.next": true,
+    "**/.DS_Store": true,
+    "**/node_modules": true,
+    "**/build": true,
+    "**/dist": true,
+    "**/*.log": true
+  },
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
+}

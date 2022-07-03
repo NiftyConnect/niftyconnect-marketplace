@@ -1,0 +1,10 @@
+
+
+https://github.com/mintverse/niftyconnect-contracts/blob/main/test/TestExchange.js
+
+NiftyConnectProxyRegistry: https://bscscan.com/address/0x2419f8507b514b2cf23dc0a91a539213bf9b2f12
+NiftyConnectTokenTransferProxy: https://bscscan.com/address/0x19394fd95f8175e3129ee5aebe8129cd1acc9952
+MerkleValidator: https://bscscan.com/address/0x1e731aa735d1def8cbc2208241d2d9ef5e31f962
+RoyaltyRegisterHub: https://bscscan.com/address/0x8369a8577ea571d50210d48538e2ca345aff4aeb
+NiftyConnectExchange: https://bscscan.com/address/0xf546efa988379b76f7db418d0d15acb438133318
+
