@@ -2,7 +2,7 @@ import { Button, chakra, Flex, Spinner } from '@chakra-ui/react'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useFixedResizeCard, useQueryNftsByAddress } from '../../../hooks'
 import { Empty } from '../../Empty'
-import { NftInfoWithOrder } from '../../../types'
+import { NftInfoWithOrder, NftScanOrder } from '../../../types'
 import { NftCard } from '../../NftCard'
 import { useRouter } from 'next/router'
 
@@ -56,7 +56,7 @@ const NftList = () => {
     setIsQuerying(true)
     Promise.all([queryNfts({ address: address as string, erc_type: 'erc721' })])
       .then((values) => {
-        setNfts(values[0].content.map((item) => ({ nft: { ...item } })))
+        setNfts(values[0].content.map((item) => ({ nft: { ...item }, order: {} as NftScanOrder })))
         setErc721Page(values[0].next)
         setTotal(values[0].total)
       })

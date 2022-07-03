@@ -85,27 +85,26 @@ export const ListProgress = () => {
   ])
 
   useEffect(() => {
-    isApprovedForAll({ operator: contracts.NiftyConnectExchange[chainId], owner: account?.address }).then(
-      (approved) => {
-        setIsApproved(approved)
+    isApprovedForAll({ operator: contracts.NiftyConnectExchange[chainId], owner: address }).then((approved) => {
+      setIsApproved(approved)
 
-        if (!approved) {
-          approveForAll({ contractAddress: contracts.NiftyConnectExchange[chainId], approved: true })
-            .then((res) => {
-              setIsApproved(res)
-              makeNiftyOrder()
-            })
-            .catch((err) => {
-              if (err?.message?.includes('User denied transaction signature')) {
-                setStep('List')
-              }
-            })
-        } else {
-          makeNiftyOrder()
-        }
-      },
-    )
+      if (!approved) {
+        approveForAll({ contractAddress: contracts.NiftyConnectExchange[chainId], approved: true })
+          .then((res) => {
+            setIsApproved(res)
+            makeNiftyOrder()
+          })
+          .catch((err) => {
+            if (err?.message?.includes('User denied transaction signature')) {
+              setStep('List')
+            }
+          })
+      } else {
+        makeNiftyOrder()
+      }
+    })
   }, [
+    address,
     approveForAll,
     chainId,
     expireTime,
