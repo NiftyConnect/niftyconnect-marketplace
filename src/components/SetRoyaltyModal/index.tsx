@@ -26,10 +26,8 @@ type Props = {
 
 export const SetRoyaltyModal = ({ isOpen, onClose }: Props) => {
   const [isCancelling, setIsCancelling] = useState(false)
-  const { activeChain } = useNetwork()
-  const {
-    data: { address: account },
-  } = useAccount()
+  const { chain } = useNetwork()
+  const { address: account } = useAccount()
   const [collections, setCollections] = useState([])
   const [nftAddress, setNftAddress] = useState('')
   const [royalty, setRoyaltyValue] = useState('')
@@ -56,7 +54,7 @@ export const SetRoyaltyModal = ({ isOpen, onClose }: Props) => {
 
       const tx = await setRoyalty({
         nftAddress,
-        chainId: activeChain?.id,
+        chainId: chain?.id,
         royaltyReceiverAddress: account,
         royaltyRate: royaltyBig.toString(),
       })
@@ -74,7 +72,7 @@ export const SetRoyaltyModal = ({ isOpen, onClose }: Props) => {
     } finally {
       setIsCancelling(false)
     }
-  }, [account, activeChain?.id, nftAddress, onClose, royalty, toast])
+  }, [account, chain?.id, nftAddress, onClose, royalty, toast])
 
   const royaltyChange = useCallback((evt) => {
     const royalty = evt.currentTarget.value
