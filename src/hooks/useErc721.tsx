@@ -8,7 +8,6 @@ export const useApproveForAll = (nftAddress: string) => {
 
   return useCallback(
     async ({ contractAddress, approved }: { contractAddress: string; approved: boolean }) => {
-      console.log(contract)
       const tx = await contract.setApprovalForAll(contractAddress, approved)
       return tx.wait()
     },
@@ -28,9 +27,7 @@ export const useIsApprovedForAll = (nftAddress: string) => {
 }
 
 export const useSafeTransferFrom = (nftAddress: string) => {
-  const {
-    data: { address: account },
-  } = useAccount()
+  const { address: account } = useAccount()
   const contract = useContract({ contractAddress: nftAddress, abi: Erc721Abi })
 
   return useCallback(

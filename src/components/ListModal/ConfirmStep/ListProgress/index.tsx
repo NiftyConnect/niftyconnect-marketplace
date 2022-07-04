@@ -2,7 +2,7 @@ import { Box, CircularProgress, Container, Flex, Spinner, Stack, Text, useToast 
 import moment from 'moment'
 import { makeOrder } from 'niftyconnect-js'
 import React, { useCallback, useEffect, useState } from 'react'
-import { useAccount } from 'wagmi'
+import { useAccount, useSigner } from 'wagmi'
 import { contracts, FEE_ADDRESS } from '../../../../constants'
 import { useApproveForAll, useIsApprovedForAll } from '../../../../hooks'
 import { Side, TokenStandard } from '../../../../types'
@@ -13,6 +13,7 @@ export const ListProgress = () => {
   const [isApproved, setIsApproved] = useState(false)
   const toast = useToast({ position: 'top' })
   const { address } = useAccount()
+  const { data: signer } = useSigner()
   const {
     state: {
       salePrice,
@@ -83,27 +84,31 @@ export const ListProgress = () => {
   ])
 
   useEffect(() => {
-    if (!address) return
-    isApprovedForAll({ operator: contracts.NiftyConnectExchange[1], owner: address }).then((approved) => {
-      setIsApproved(approved)
+    if (!signer) return
+    isApprovedForAll({ operator: contracts.NiftyConnectExchange[1], owner: address })
+      .then((approved) => {
+        setIsApproved(approved)
 
-      if (!approved) {
-        approveForAll({ contractAddress: contracts.NiftyConnectExchange[1], approved: true })
-          .then((res) => {
-            setIsApproved(res)
-            makeNiftyOrder()
-          })
-          .catch((err) => {
-            if (err?.message?.includes('User denied transaction signature')) {
-              setStep('List')
-            }
-          })
-      } else {
-        makeNiftyOrder()
-      }
-    })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+        if (!approved) {
+          approveForAll({ contractAddress: contracts.NiftyConnectExchange[1], approved: true })
+            .then((res) => {
+              setIsApproved(res)
+              makeNiftyOrder()
+            })
+            .catch((err) => {
+              console.log(err)
+              if (err?.message?.includes('User denied transaction signature')) {
+                setStep('List')
+              }
+            })
+        } else {
+          makeNiftyOrder()
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }, [address, approveForAll, isApprovedForAll, makeNiftyOrder, setStep, signer])
 
   return (
     <Container padding="0" marginTop="30px">

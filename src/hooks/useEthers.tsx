@@ -8,12 +8,12 @@ import { useNetwork, useSigner } from 'wagmi'
 const { publicRuntimeConfig } = getConfig()
 
 export const useChainId = () => {
-  const { activeChain } = useNetwork()
+  const { chain } = useNetwork()
   return useMemo((): number => {
-    if (activeChain?.id) return activeChain?.id
+    if (chain?.id) return chain?.id
     // if (window?.ethereum?.chainId) return Number(window?.ethereum?.chainId)
     return 1
-  }, [activeChain?.id])
+  }, [chain?.id])
 }
 
 export const useEthersJsonRpcProvider = () => {
